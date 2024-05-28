@@ -18,9 +18,9 @@ class LessonResource extends Resource
     protected static ?string $model = Lesson::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-queue-list';
-    protected static ?string $navigationLabel = 'Уроки';
-    protected static ?string $pluralModelLabel = 'Уроки';
-    protected static ?string $modelLabel = 'Урок';
+    protected static ?string $navigationLabel = 'Дисциплины';
+    protected static ?string $pluralModelLabel = 'Дисциплины';
+    protected static ?string $modelLabel = 'Дисциплина';
     protected static ?string $navigationGroup = 'Администрирование';
 
     public static function form(Form $form): Form
