@@ -35,6 +35,7 @@ class DepartmentResource extends Resource
                     ->relationship('user', 'name')
                     ->searchable()->preload()
                     ->label('Преподаватель')
+                    ->required()
                     ->default(null),
 
                 Forms\Components\Select::make('faculty_id')

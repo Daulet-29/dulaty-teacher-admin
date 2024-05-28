@@ -28,31 +28,43 @@ class StudentLessonResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('student_id')
+                    ->label('ФИО Студента')
                     ->relationship('student', 'last_name')
                     ->searchable()
+                    ->preload()
                     ->default(null),
                 Forms\Components\Select::make('lesson_id')
+                    ->searchable()
+                    ->preload()
+                    ->label('Урок')
                     ->relationship('lesson', 'title')
                     ->default(null),
                 Forms\Components\TextInput::make('first_boundary_control')
+                    ->label('Первая рубежка')
                     ->numeric()
                     ->default(null),
                 Forms\Components\TextInput::make('second_boundary_control')
+                    ->label('Вторая рубежка')
                     ->numeric()
                     ->default(null),
                 Forms\Components\TextInput::make('session')
+                    ->label('Сессия')
                     ->numeric()
                     ->default(null),
                 Forms\Components\Select::make('year_id')
+                    ->label('Год обучения')
                     ->relationship('year', 'title')
                     ->default(null),
                 Forms\Components\Select::make('semester_id')
+                    ->label('Семестр')
                     ->relationship('semester', 'title')
                     ->default(null),
-                Forms\Components\Select::make('teacher_id')
-                    ->relationship('teacher', 'name')
-                    ->default(null),
+//                Forms\Components\Select::make('teacher_id')
+//                    ->label('Преподаватель')
+//                    ->relationship('teacher', 'name')
+//                    ->default(null),
                 Forms\Components\TextInput::make('total')
+                    ->label('Итог')
                     ->numeric()
                     ->default(null),
             ]);
@@ -62,31 +74,45 @@ class StudentLessonResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('student.id')
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('student.last_name')
+                    ->label('ФИО Студента')
+                    ->numeric()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('lesson.title')
+                    ->label('Урок')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('first_boundary_control')
+                    ->label('Первая рубежка')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('second_boundary_control')
+                    ->label('Вторая рубежка')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('session')
+                    ->label('Сессия')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('year.title')
+                    ->label('Год обучения')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('semester.title')
+                    ->label('Семестр')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('teacher_id')
+                Tables\Columns\TextColumn::make('teacher.name')
+                    ->label('Преподаватель')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total')
+                    ->label('Итог')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
