@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\RelationManagers\GroupsRelationManager;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -39,6 +40,7 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
+                    
                 Forms\Components\DateTimePicker::make('email_verified_at')
                     ->label('Дата проверки почты'),
                 Forms\Components\TextInput::make('password')
@@ -63,6 +65,10 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label('Эл.почта')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('full')
+                    ->label('Имя - email')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->label('Дата проверки почты')
@@ -120,7 +126,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            GroupsRelationManager::class
         ];
     }
 
