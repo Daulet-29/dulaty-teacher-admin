@@ -17,6 +17,7 @@ use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -68,10 +69,10 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->label('Эл.почта')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('full')
-                    ->label('Имя - email')
-                    ->sortable()
-                    ->searchable(),
+//                Tables\Columns\TextColumn::make('full')
+//                    ->label('Имя - email')
+//                    ->sortable()
+//                    ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->label('Дата проверки почты')
                     ->dateTime()
@@ -145,6 +146,10 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->where('role', 'teacher');
+        if (Auth::user()->role == 'teacher') {
+            return parent::getEloquentQuery()->where('role', 'teacher');
+        } else {
+            return parent::getEloquentQuery()->where('role', 'teacher');
+        }
     }
 }

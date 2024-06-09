@@ -65,10 +65,10 @@ class AdminResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->label('Эл.почта')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('full')
-                    ->label('Имя - email')
-                    ->sortable()
-                    ->searchable(),
+//                Tables\Columns\TextColumn::make('full')
+//                    ->label('Имя - email')
+//                    ->sortable()
+//                    ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->label('Дата проверки почты')
                     ->dateTime()
