@@ -30,6 +30,17 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Администрирование';
     protected static ?int $navigationSort = 1;
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        if (Auth::user()->role == 'teacher') {
+            return User::query()->where('role', 'teacher');
+//            return parent::getEloquentQuery()->where('role', 'teacher');
+        } else {
+            return User::query()->where('role', 'teacher');
+//            return parent::getEloquentQuery()->where('role', 'teacher');
+        }
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -53,7 +64,7 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('role')
                     ->label('Роль')
-                    ->options(['teacher'])
+                    ->options(['teacher' => 'teacher'])
                     ->default('teacher')
                     ->required(),
             ]);
@@ -144,12 +155,4 @@ class UserResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        if (Auth::user()->role == 'teacher') {
-            return parent::getEloquentQuery()->where('role', 'teacher');
-        } else {
-            return parent::getEloquentQuery()->where('role', 'teacher');
-        }
-    }
 }

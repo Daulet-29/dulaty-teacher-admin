@@ -26,6 +26,15 @@ class AdminResource extends Resource
     protected static ?string $navigationGroup = 'Администрирование';
     protected static ?int $navigationSort = 2;
 
+    public static function getEloquentQuery(): Builder
+    {
+        if (Auth::user()->role == 'teacher') {
+            return parent::getEloquentQuery()->where('role', 'else');
+        } else {
+            return parent::getEloquentQuery()->where('role', 'admin');
+        }
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -49,7 +58,7 @@ class AdminResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('role')
                     ->label('Роль')
-                    ->options(['admin'])
+                    ->options(['admin' => 'admin'])
                     ->default('admin')
                     ->required(),
             ]);
@@ -132,12 +141,4 @@ class AdminResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        if (Auth::user()->role == 'teacher') {
-            return parent::getEloquentQuery()->where('role', 'else');
-        } else {
-            return parent::getEloquentQuery()->where('role', 'admin');
-        }
-    }
 }
