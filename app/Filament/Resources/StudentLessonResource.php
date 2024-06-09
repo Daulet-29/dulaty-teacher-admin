@@ -59,7 +59,7 @@ class StudentLessonResource extends Resource
                     ->label('Семестр')
                     ->relationship('semester', 'title')
                     ->default(null),
-//                Forms\Components\Select::make('teacher_id')
+                //                Forms\Components\Select::make('teacher_id')
 //                    ->label('Преподаватель')
 //                    ->relationship('teacher', 'name')
 //                    ->default(null),
@@ -154,6 +154,7 @@ class StudentLessonResource extends Resource
             'create' => Pages\CreateStudentLesson::route('/create'),
             'view' => Pages\ViewStudentLesson::route('/{record}'),
             'edit' => Pages\EditStudentLesson::route('/{record}/edit'),
+            'statistics' => Pages\StudentLessonStatistics::route('/statistics'),
         ];
     }
 }

@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\RelationManagers\DepartmentsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\FacultiesRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\GroupsRelationManager;
 use App\Models\User;
 use Filament\Forms;
@@ -40,7 +42,7 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                    
+
                 Forms\Components\DateTimePicker::make('email_verified_at')
                     ->label('Дата проверки почты'),
                 Forms\Components\TextInput::make('password')
@@ -85,7 +87,7 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])->defaultSort('name')
             ->filters([
-//                TextConstraint::make('name')->label('Имя'),
+                //                TextConstraint::make('name')->label('Имя'),
 //                QueryBuilder::make()
 //                    ->constraints([
 //                        TextConstraint::make('name')->label('Имя'),
@@ -126,7 +128,8 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            GroupsRelationManager::class
+            GroupsRelationManager::class,
+            DepartmentsRelationManager::class
         ];
     }
 

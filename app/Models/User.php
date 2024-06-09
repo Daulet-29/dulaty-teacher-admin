@@ -44,7 +44,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function groups():HasMany
+    public function groups(): HasMany
     {
         return $this->hasMany(Group::class);
     }
@@ -52,5 +52,10 @@ class User extends Authenticatable
     public function getFullAttribute()
     {
         return $this->name . ' - ' . $this->email;
+    }
+
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class);
     }
 }
