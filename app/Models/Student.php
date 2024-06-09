@@ -22,7 +22,7 @@ class Student extends Model
     protected $guarded = ['id'];
      protected $fillable = [
          'first_name', 'parent_name', 'last_name', 'date_of_birth', 'email', 'phone', 'enrollment_year_id', 'department_id',
-         'faculty_id',
+         'faculty_id', 'group_id'
      ];
 
     // protected $hidden = [];
@@ -39,6 +39,10 @@ class Student extends Model
         return $this->belongsTo(Faculty::class);
     }
 
+    public function group(): BelongsTo {
+        return $this->belongsTo(Group::class);
+    }
+
     public function department(): BelongsTo {
         return $this->belongsTo(Department::class);
     }
@@ -46,6 +50,9 @@ class Student extends Model
     public function enrollment_year(): BelongsTo {
         return $this->belongsTo(Year::class, 'enrollment_year_id');
     }
-
+    public function getFullAttribute(): string
+    {
+        return $this->last_name . ' ' . $this->first_name . ' ' . $this->parent_name;
+    }
 
 }

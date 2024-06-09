@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Department;
+use App\Models\Group;
 use App\Models\Student;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -77,6 +78,15 @@ class StudentResource extends Resource
                     ->preload()
                     ->live()
                     ->default(null),
+                Forms\Components\Select::make('group_id')
+                    ->options(fn (Get $get): Collection => Group::query()
+                        ->where('department_id', $get('department_id'))
+                        ->pluck('title', 'id'))
+                    ->label('Группа')
+                    ->searchable()
+                    ->preload()
+                    ->live()
+                    ->default(null),
 
             ]);
     }
@@ -103,6 +113,10 @@ class StudentResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('enrollment_year.title')
                     ->label('Год поступления')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('group.title')
+                    ->label('Группа')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('department.title')

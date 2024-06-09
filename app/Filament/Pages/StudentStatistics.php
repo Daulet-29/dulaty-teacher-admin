@@ -15,11 +15,27 @@ class StudentStatistics extends Page
     protected static ?string $modelLabel = 'Диаграмма';
     protected static ?string $navigationGroup = 'Диаграмма';
 
+    public $students;
+
     public function mount()
     {
-        $this->students = DB::table('student_lessons')
+        // Извлечение данных о студентах и их оценках
+        $this->students = StudentLesson::with('student')
             ->select('student_id', DB::raw('AVG(total) as average_score'))
             ->groupBy('student_id')
-            ->get();
+            ->get()
+            ->map(function ($studentLesson) {
+                return [
+                    'name' => $studentLesson->student->name,
+                    'average_score' => $studentLesson->average_score,
+                ];
+            });
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return view(static::$view, [
+            'students' => $this->students,
+        ])->layout('filament::components.layouts.app'); // Убедитесь, что макет существует
     }
 }

@@ -16,6 +16,15 @@ class StudentLessonObserver
     public function creating(StudentLesson $studentLesson)
     {
         $studentLesson->teacher_id = Auth::id();
+        // Проверяем, заполнены ли поля first_boundary_control, second_boundary_control, session
+        if (!is_null($studentLesson->first_boundary_control) &&
+            !is_null($studentLesson->second_boundary_control) &&
+            !is_null($studentLesson->session))
+        {
+            $studentLesson->total = $studentLesson->first_boundary_control * 0.3 +
+                $studentLesson->second_boundary_control * 0.3 +
+                $studentLesson->session * 0.4;
+        }
     }
 
     /**
@@ -27,5 +36,14 @@ class StudentLessonObserver
     public function updating(StudentLesson $studentLesson)
     {
         $studentLesson->teacher_id = Auth::id();
+        // Проверяем, заполнены ли поля first_boundary_control, second_boundary_control, session
+        if (!is_null($studentLesson->first_boundary_control) &&
+            !is_null($studentLesson->second_boundary_control) &&
+            !is_null($studentLesson->session))
+        {
+            $studentLesson->total = $studentLesson->first_boundary_control * 0.3 +
+                $studentLesson->second_boundary_control * 0.3 +
+                $studentLesson->session * 0.4;
+        }
     }
 }

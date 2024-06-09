@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StudentLessonResource\Pages;
 use App\Filament\Resources\StudentLessonResource\RelationManagers;
+use App\Models\Student;
 use App\Models\StudentLesson;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -29,8 +30,9 @@ class StudentLessonResource extends Resource
             ->schema([
                 Forms\Components\Select::make('student_id')
                     ->label('ФИО Студента')
-                    ->relationship('student', 'last_name')
-                    ->searchable()
+                    ->options(function () {
+                        return Student::all()->pluck('full', 'id');
+                    })->searchable()
                     ->preload()
                     ->default(null),
                 Forms\Components\Select::make('lesson_id')
@@ -63,10 +65,10 @@ class StudentLessonResource extends Resource
 //                    ->label('Преподаватель')
 //                    ->relationship('teacher', 'name')
 //                    ->default(null),
-                Forms\Components\TextInput::make('total')
-                    ->label('Итог')
-                    ->numeric()
-                    ->default(null),
+//                Forms\Components\TextInput::make('total')
+//                    ->label('Итог')
+//                    ->numeric()
+//                    ->default(null),
             ]);
     }
 
@@ -78,7 +80,7 @@ class StudentLessonResource extends Resource
                     ->label('ID')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('student.last_name')
+                Tables\Columns\TextColumn::make('student.full')
                     ->label('ФИО Студента')
                     ->numeric()
                     ->sortable(),

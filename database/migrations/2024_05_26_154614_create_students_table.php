@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('enrollment_year_id')->references('id')->on('years')->nullOnDelete();
             $table->unsignedBigInteger('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->nullOnDelete();
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->unsignedBigInteger('faculty_id')->nullable();
             $table->foreign('faculty_id')->references('id')->on('faculties')->nullOnDelete();
             $table->timestamps();

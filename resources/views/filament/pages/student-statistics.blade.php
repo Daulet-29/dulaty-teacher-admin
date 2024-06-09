@@ -9,7 +9,7 @@
             const ctx = document.getElementById('studentChart').getContext('2d');
             const studentData = @json($students);
 
-            const labels = studentData.map(student => student.student_id);
+            const labels = studentData.map(student => student.name);
             const data = studentData.map(student => student.average_score);
 
             const chart = new Chart(ctx, {
