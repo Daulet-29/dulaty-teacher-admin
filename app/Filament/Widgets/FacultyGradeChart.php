@@ -2,26 +2,25 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Faculty;
 use App\Models\Group;
 use App\Models\Student;
 use App\Models\StudentLesson;
 use Filament\Widgets\ChartWidget;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 
-class GradeChart extends ChartWidget
+class FacultyGradeChart extends ChartWidget
 {
-    protected static ?string $heading = 'Оценка по группе';
+    protected static ?string $heading = 'Оценка по факультету';
 
     public ?string $filter = null;
 
     protected function getData(): array
     {
         // Если выбран фильтр "Все" (пустая строка), то выбираем все группы
-        $groupIds = $this->filter ? [$this->filter] : Group::query()->pluck('id')->toArray();
+        $facultyIds = $this->filter ? [$this->filter] : Faculty::query()->pluck('id')->toArray();
 
         // Получаем ID студентов в выбранных группах
-        $studentIds = Student::whereIn('group_id', $groupIds)->pluck('id')->toArray();
+        $studentIds = Student::whereIn('faculty_id', $facultyIds)->pluck('id')->toArray();
 
         // Получаем данные для каждой категории оценок
         $grades = [
@@ -97,6 +96,6 @@ class GradeChart extends ChartWidget
     protected function getFilters(): ?array
     {
         // Формируем фильтры для выбора групп
-        return ['' => 'Все'] + Group::query()->pluck('title', 'id')->toArray();
+        return ['' => 'Все'] + Faculty::query()->pluck('title', 'id')->toArray();
     }
 }

@@ -63,8 +63,6 @@ class AdminPanelProvider extends PanelProvider
 
     public function boot()
     {
-        Filament::registerPages([
-            StudentStatistics::class,
-        ]);
+        //
     }
 }

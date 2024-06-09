@@ -2,32 +2,29 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Filament\Resources\UserResource\RelationManagers\DepartmentsRelationManager;
-use App\Filament\Resources\UserResource\RelationManagers\FacultiesRelationManager;
-use App\Filament\Resources\UserResource\RelationManagers\GroupsRelationManager;
+use App\Filament\Resources\AdminResource\Pages;
+use App\Filament\Resources\AdminResource\RelationManagers;
+use App\Models\Admin;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
-class UserResource extends Resource
+class AdminResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
-    protected static ?string $navigationLabel = 'Преподаватели';
-    protected static ?string $pluralModelLabel = 'Преподаватели';
-    protected static ?string $modelLabel = 'Преподаватель';
+    protected static ?string $navigationLabel = 'Админы';
+    protected static ?string $pluralModelLabel = 'Админы';
+    protected static ?string $modelLabel = 'Админ';
     protected static ?string $navigationGroup = 'Администрирование';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -52,8 +49,8 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('role')
                     ->label('Роль')
-                    ->options(['teacher'])
-                    ->default('teacher')
+                    ->options(['admin'])
+                    ->default('admin')
                     ->required(),
             ]);
     }
@@ -125,26 +122,22 @@ class UserResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            GroupsRelationManager::class,
-            DepartmentsRelationManager::class
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListAdmins::route('/'),
+            'create' => Pages\CreateAdmin::route('/create'),
+            'view' => Pages\ViewAdmin::route('/{record}'),
+            'edit' => Pages\EditAdmin::route('/{record}/edit'),
         ];
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('role', 'teacher');
+        if (Auth::user()->role == 'teacher') {
+            return parent::getEloquentQuery()->where('role', 'else');
+        } else {
+            return parent::getEloquentQuery()->where('role', 'admin');
+        }
     }
 }

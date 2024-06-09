@@ -2,26 +2,25 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Group;
+use App\Models\Department;
+use App\Models\Faculty;
 use App\Models\Student;
 use App\Models\StudentLesson;
 use Filament\Widgets\ChartWidget;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 
-class GradeChart extends ChartWidget
+class DepartmentGradeChart extends ChartWidget
 {
-    protected static ?string $heading = 'Оценка по группе';
+    protected static ?string $heading = 'Оценка по кафедре';
 
     public ?string $filter = null;
 
     protected function getData(): array
     {
         // Если выбран фильтр "Все" (пустая строка), то выбираем все группы
-        $groupIds = $this->filter ? [$this->filter] : Group::query()->pluck('id')->toArray();
+        $departmentIds = $this->filter ? [$this->filter] : Department::query()->pluck('id')->toArray();
 
         // Получаем ID студентов в выбранных группах
-        $studentIds = Student::whereIn('group_id', $groupIds)->pluck('id')->toArray();
+        $studentIds = Student::whereIn('department_id', $departmentIds)->pluck('id')->toArray();
 
         // Получаем данные для каждой категории оценок
         $grades = [
@@ -91,12 +90,12 @@ class GradeChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'doughnut'; // Тип диаграммы, можно изменить на другой, например 'bar' или 'line'
+        return 'doughnut';
     }
 
     protected function getFilters(): ?array
     {
         // Формируем фильтры для выбора групп
-        return ['' => 'Все'] + Group::query()->pluck('title', 'id')->toArray();
+        return ['' => 'Все'] + Department::query()->pluck('title', 'id')->toArray();
     }
 }
