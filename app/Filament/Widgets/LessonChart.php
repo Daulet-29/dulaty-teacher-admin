@@ -18,9 +18,6 @@ class LessonChart extends ChartWidget
         // Если выбран фильтр "Все" (пустая строка), то выбираем все группы
         $lessonIds = $this->filter ? [$this->filter] : Lesson::query()->where('user_id', Auth::id())->pluck('id')->toArray();
 
-        // Получаем ID студентов в выбранных группах
-        // $studentIds = Student::whereIn('group_id', $groupIds)->pluck('id')->toArray();
-
         // Получаем данные для каждой категории оценок
         $grades = [
             'A(95-100)' => [95, 100],
@@ -65,13 +62,23 @@ class LessonChart extends ChartWidget
             'rgba(255, 13, 13, 1)', // F
         ];
 
+        $totalStudents = StudentLesson::whereIn('lesson_id', $lessonIds)->count();
+        $gradeCounts = [];
+
         foreach ($grades as $label => $range) {
             $count = StudentLesson::whereIn('lesson_id', $lessonIds)
                 ->whereBetween('total', $range)
                 ->count();
             $data[] = $count;
             $labels[] = $label;
+            $gradeCounts[$label] = $count;
         }
+
+        $description = "Всего студентов: $totalStudents. ";
+        foreach ($gradeCounts as $grade => $count) {
+            $description .= "$grade: $count, ";
+        }
+        $description = rtrim($description, ', '); // Удаление последней запятой
 
         return [
             'datasets' => [
@@ -84,6 +91,7 @@ class LessonChart extends ChartWidget
                 ],
             ],
             'labels' => $labels,
+            'description' => $description,
         ];
     }
 
@@ -94,12 +102,12 @@ class LessonChart extends ChartWidget
 
     protected function getFilters(): ?array
     {
-
-        // Формируем фильтры для выбора групп
+        // Формируем фильтры для выбора дисциплин
         return ['' => 'Все'] + Lesson::query()->where('user_id', Auth::id())->pluck('title', 'id')->toArray();
     }
+
     public function getDescription(): ?string
     {
-        return 'The number of blog posts published per month.';
+        return $this->getData()['description'];
     }
 }

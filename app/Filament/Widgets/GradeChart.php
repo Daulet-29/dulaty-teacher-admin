@@ -67,13 +67,23 @@ class GradeChart extends ChartWidget
             'rgba(255, 13, 13, 1)', // F
         ];
 
+        $totalStudents = count($studentIds);
+        $gradeCounts = [];
+
         foreach ($grades as $label => $range) {
             $count = StudentLesson::whereIn('student_id', $studentIds)
                 ->whereBetween('total', $range)
                 ->count();
             $data[] = $count;
             $labels[] = $label;
+            $gradeCounts[$label] = $count;
         }
+
+        $description = "Всего студентов: $totalStudents.         ";
+        foreach ($gradeCounts as $grade => $count) {
+            $description .= "$grade: $count, ";
+        }
+        $description = rtrim($description, ', '); // Удаление последней запятой
 
         return [
             'datasets' => [
@@ -86,6 +96,7 @@ class GradeChart extends ChartWidget
                 ],
             ],
             'labels' => $labels,
+            'description' => $description,
         ];
     }
 
@@ -98,5 +109,10 @@ class GradeChart extends ChartWidget
     {
         // Формируем фильтры для выбора групп
         return ['' => 'Все'] + Group::query()->pluck('title', 'id')->toArray();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->getData()['description'];
     }
 }
