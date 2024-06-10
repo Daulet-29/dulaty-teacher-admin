@@ -2,26 +2,24 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Group;
-use App\Models\Student;
-use App\Models\StudentLesson;
 use Filament\Widgets\ChartWidget;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
+use App\Models\Lesson;
+use App\Models\StudentLesson;
+use Illuminate\Support\Facades\Auth;
 
-class GradeChart extends ChartWidget
+class LessonChart extends ChartWidget
 {
-    protected static ?string $heading = 'Оценка по группе';
+    protected static ?string $heading = 'Оценка по дисциплине';
 
     public ?string $filter = null;
 
     protected function getData(): array
     {
         // Если выбран фильтр "Все" (пустая строка), то выбираем все группы
-        $groupIds = $this->filter ? [$this->filter] : Group::query()->pluck('id')->toArray();
+        $lessonIds = $this->filter ? [$this->filter] : Lesson::query()->where('user_id', Auth::id())->pluck('id')->toArray();
 
         // Получаем ID студентов в выбранных группах
-        $studentIds = Student::whereIn('group_id', $groupIds)->pluck('id')->toArray();
+        // $studentIds = Student::whereIn('group_id', $groupIds)->pluck('id')->toArray();
 
         // Получаем данные для каждой категории оценок
         $grades = [
@@ -68,7 +66,7 @@ class GradeChart extends ChartWidget
         ];
 
         foreach ($grades as $label => $range) {
-            $count = StudentLesson::whereIn('student_id', $studentIds)
+            $count = StudentLesson::whereIn('lesson_id', $lessonIds)
                 ->whereBetween('total', $range)
                 ->count();
             $data[] = $count;
@@ -96,7 +94,12 @@ class GradeChart extends ChartWidget
 
     protected function getFilters(): ?array
     {
+
         // Формируем фильтры для выбора групп
-        return ['' => 'Все'] + Group::query()->pluck('title', 'id')->toArray();
+        return ['' => 'Все'] + Lesson::query()->where('user_id', Auth::id())->pluck('title', 'id')->toArray();
+    }
+    public function getDescription(): ?string
+    {
+        return 'The number of blog posts published per month.';
     }
 }

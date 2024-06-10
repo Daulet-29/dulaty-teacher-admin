@@ -40,11 +40,11 @@ class StudentLessonResource extends Resource
                 Forms\Components\Select::make('lesson_id')
                     ->searchable()
                     ->preload()
-                    ->label('Урок')
+                    ->label('Дисциплина')
                     ->options(function () {
                         return Lesson::query()->where('user_id', Auth::id())->pluck('title', "id");
                     })
-//                    ->relationship('lesson', 'title')
+                    //                    ->relationship('lesson', 'title')
                     ->default(null),
                 Forms\Components\TextInput::make('first_boundary_control')
                     ->label('Первая рубежка')
@@ -91,7 +91,7 @@ class StudentLessonResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('lesson.title')
-                    ->label('Урок')
+                    ->label('Дисциплина')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('first_boundary_control')
