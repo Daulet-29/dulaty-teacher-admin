@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StudentLessonResource\Pages;
 use App\Filament\Resources\StudentLessonResource\RelationManagers;
+use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\StudentLesson;
 use Filament\Forms;
@@ -13,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class StudentLessonResource extends Resource
 {
@@ -39,7 +41,10 @@ class StudentLessonResource extends Resource
                     ->searchable()
                     ->preload()
                     ->label('Урок')
-                    ->relationship('lesson', 'title')
+                    ->options(function () {
+                        return Lesson::query()->where('user_id', Auth::id())->pluck('title', "id");
+                    })
+//                    ->relationship('lesson', 'title')
                     ->default(null),
                 Forms\Components\TextInput::make('first_boundary_control')
                     ->label('Первая рубежка')

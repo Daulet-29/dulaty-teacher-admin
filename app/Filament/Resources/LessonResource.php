@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class LessonResource extends Resource
 {
@@ -23,6 +24,13 @@ class LessonResource extends Resource
     protected static ?string $modelLabel = 'Дисциплина';
     protected static ?string $navigationGroup = 'Администрирование';
 
+//    public static function getEloquentQuery(): Builder
+//    {
+//        if (Auth::user()->role == 'teacher') {
+//            return parent::getEloquentQuery()->where('user_id', Auth::id());
+//        }
+//    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -31,6 +39,12 @@ class LessonResource extends Resource
                     ->label('Название')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->searchable()->preload()
+                    ->label('Преподаватель')
+                    ->required()
+                    ->default(null),
             ]);
     }
 
@@ -41,6 +55,9 @@ class LessonResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label('Название')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Преподаватель')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Дата создания')
                     ->dateTime()
