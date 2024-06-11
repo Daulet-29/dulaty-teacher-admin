@@ -14,6 +14,7 @@ class GradeChart extends ChartWidget
     protected static ?string $heading = 'Оценка по группе';
 
     public ?string $filter = null;
+    protected static ?string $maxHeight = '500px';
 
     protected function getData(): array
     {
@@ -47,8 +48,8 @@ class GradeChart extends ChartWidget
             'rgba(34, 80, 227, 0.62)', // B
             'rgba(34, 80, 227, 0.46)', // B-
             'rgba(255, 158, 13, 1)', // C+
-            'rgba(255, 99, 132, 1)', // C
-            'rgba(255, 158, 13, 0.64)', // C-
+            'rgba(255, 158, 13, 0.64)', // C
+            'rgba(255, 99, 132, 1)', // C-
             'rgba(255, 13, 136, 0.54)', // D+
             'rgba(255, 13, 136, 1)', // D
             'rgba(255, 13, 13, 1)', // F
@@ -60,8 +61,8 @@ class GradeChart extends ChartWidget
             'rgba(34, 80, 227, 0.62)', // B
             'rgba(34, 80, 227, 0.46)', // B-
             'rgba(255, 158, 13, 1)', // C+
-            'rgba(255, 99, 132, 1)', // C
-            'rgba(255, 158, 13, 0.64)', // C-
+            'rgba(255, 158, 13, 0.64)', // C
+            'rgba(255, 99, 132, 1)', // C-
             'rgba(255, 13, 136, 0.54)', // D+
             'rgba(255, 13, 136, 1)', // D
             'rgba(255, 13, 13, 1)', // F
